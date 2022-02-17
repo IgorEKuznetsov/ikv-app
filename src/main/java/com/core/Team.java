@@ -32,7 +32,7 @@ public class Team {
         players = new Player[]{new Player("Mark", 7),
                 new Player("Bob", 40),
                 new Player("Karl", 30),
-                new Player("David", 35)};
+                new Player("David", 3)};
 
         className = getClass().getSimpleName();
     }
@@ -48,6 +48,7 @@ public class Team {
     public void showResults(Course course) {
         for (Player player : players) {
             if (course.doIt(player)) System.out.println("Congratulations! " + player.playerName);
+            else System.out.println("Didn't go the distance " + player);
         }
     }
 
