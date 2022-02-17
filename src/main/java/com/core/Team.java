@@ -48,7 +48,7 @@ public class Team {
     public void showResults(Course course) {
         for (Player player : players) {
             if (course.doIt(player)) System.out.println("Congratulations! " + player.playerName);
-            else System.out.println("Didn't go the distance " + player);
+            else System.out.println(player.playerName + " couldn't run the distance");
         }
     }
 
