@@ -8,8 +8,11 @@ import java.sql.*;
 
 public class WeatherResponse {
     private DailyForecasts[] dailyForecasts;
-    private static String sqlCreateUsersTable = "CREATE TABLE IF NOT EXISTS forecasts (id integer PRIMARY KEY, localDate text, dayText text, nightText text, minTemperature real, maxTemperature real);";
+    private static String sqlCreateForecastTable = "CREATE TABLE IF NOT EXISTS forecasts (id integer PRIMARY KEY, localDate text, dayText text, nightText text, minTemperature real, maxTemperature real);";
     private static String sqlInsertQueryWithParameter = "INSERT INTO forecasts(localDate, dayText, nightText, minTemperature, maxTemperature) VALUES(?, ?, ?, ?, ?);";
+    private String sqlSelectForecastFromTable = "SELECT * FROM forecasts;";
+    private String url = "jdbc:sqlite:weatherForecast.db";
+
 
     public WeatherResponse(JsonObject jsonObject) {
         JsonArray dailyForecastArr = jsonObject.getJsonArray("DailyForecasts");
@@ -20,14 +23,12 @@ public class WeatherResponse {
             dailyForecasts[i] = daily;
         }
 
-        String url = "jdbc:sqlite:weatherForecast.db";
-
         try (Connection connection = DriverManager.getConnection(url);
              Statement statement = connection.createStatement();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlInsertQueryWithParameter)
         ) {
-            System.out.println("Connect established!");
-            statement.execute(sqlCreateUsersTable);
+            System.out.println("Connection established!");
+            statement.execute(sqlCreateForecastTable);
             for (DailyForecasts df : dailyForecasts) {
                 preparedStatement.setString(1, df.getDate());
                 preparedStatement.setString(2, df.getDayDescription());
@@ -43,7 +44,23 @@ public class WeatherResponse {
         }
     }
 
-
+    public void forecastResponse() {
+        try (Connection connection = DriverManager.getConnection(url);
+             Statement statement = connection.createStatement()
+        ) {
+            ResultSet weatherResultSet = statement.executeQuery(sqlSelectForecastFromTable);
+            while (weatherResultSet.next()) {
+                String date = weatherResultSet.getString("localDate");
+                String dayText = weatherResultSet.getString("dayText");
+                String nightText = weatherResultSet.getString("nightText");
+                double minTemperature = weatherResultSet.getDouble("minTemperature");
+                double maxTemperature = weatherResultSet.getDouble("maxTemperature");
+                System.out.println(date + " " + dayText + " " + nightText + " " + minTemperature + " " + maxTemperature);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @Override
     public String toString() {

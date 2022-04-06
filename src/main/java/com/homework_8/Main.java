@@ -1,5 +1,5 @@
 package com.homework_8;
-import com.homework_7.WeatherResponse;
+import com.homework_7.WeatherResponse_1;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -15,7 +15,9 @@ public class Main {
             System.out.println(jsonObject);
 
             WeatherResponse weatherResponse = new WeatherResponse(jsonObject);
-            System.out.println(weatherResponse);
+            weatherResponse.forecastResponse();
+            //System.out.println(weatherResponse);
         }
     }
+
 }
