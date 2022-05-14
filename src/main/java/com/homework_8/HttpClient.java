@@ -1,4 +1,4 @@
-package com.json;
+package com.homework_8;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class HttpClient {
-    public String fiveDaysWeatherResponse() {
+    public String getFiveDaysWeatherResponse() {
         final String WEATHER_HOST = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/294021";
         final String API_KEY = "?apikey=3f3ToB6IXFQR5s03EZt2XRR7tByJUKi7";
         final String IS_METRIC = "&metric=true";
@@ -20,11 +20,11 @@ public class HttpClient {
         try {
             URL url = new URL(WEATHER_HOST + API_KEY + IS_METRIC);
             HttpURLConnection hpCon = (HttpURLConnection) url.openConnection();
-            // Request setup
+
             hpCon.setRequestMethod("GET");
             hpCon.setConnectTimeout(5000);
             hpCon.setReadTimeout(5000);
-            // Test if the response from the server is successful
+
             if (hpCon.getResponseCode() >= 200 && hpCon.getResponseCode() < 300) {
                 buf = new BufferedReader(new InputStreamReader(hpCon.getInputStream()));
                 while ((line = buf.readLine()) != null) {
